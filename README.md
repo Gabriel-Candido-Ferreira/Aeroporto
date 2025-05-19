@@ -1,4 +1,3 @@
----
 
 # Sistema de Gestão de Aeroporto (Backend)
 
@@ -29,8 +28,6 @@ Este projeto tem como objetivo desenvolver uma aplicação backend que simule o 
 * `id`: Identificador único
 * `codigo`: Ex: `"A5"`
 * `disponivel`: `true` ou `false`
-
----
 
 ## ✅ Funcionalidades Obrigatórias
 
