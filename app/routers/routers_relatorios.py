@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Query, HTTPException
+from fastapi import APIRouter, Query, HTTPException, Depends
 from datetime import datetime
 from app.database import db
 from bson import ObjectId
+from app.services.auth import get_current_user
 
 voos_collection = db.voos
 passageiros_collection = db.passageiros
@@ -9,8 +10,12 @@ portoes_collection = db.portoes
 
 router = APIRouter(prefix="/relatorios", tags=["Relatórios"])
 
+
 @router.get("/voos-programados-dia")
-async def relatorio_voos_programados_do_dia(data: str = Query(..., description="Data no formato YYYY-MM-DD")):
+async def relatorio_voos_programados_do_dia(
+    data: str = Query(..., description="Data no formato YYYY-MM-DD"),
+    current_user: dict = Depends(get_current_user)  # 🔒 Protege para usuários autenticados
+):
     try:
         data_especifica = datetime.strptime(data, "%Y-%m-%d").date()
     except ValueError:
