@@ -20,7 +20,7 @@ async def create(passageiro: Funcionario):
 async def get_by_id(id: str):
     passageiro = await buscar_funcionario(id)
     if not passageiro:
-        raise HTTPException(status_code=404, detail="Passageiro não encontrado")
+        raise HTTPException(status_code=404, detail="funcionario não encontrado")
     return passageiro
 
 @router.put("/{id}")
@@ -35,6 +35,6 @@ async def update(id: str, passageiro: Funcionario):
 async def delete(id: str):
     try:
         await deletar_funcionario(id)
-        return {"msg": "Passageiro deletado com sucesso"}
+        return {"msg": "funcionario deletado com sucesso"}
     except HTTPException as e:
         raise e 
