@@ -3,7 +3,6 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from app.services.services_funcionario import buscar_funcionario
 from bson import ObjectId
 import os
 
@@ -32,6 +31,7 @@ def create_access_token(data: dict):
 
 # Pegar usuário logado
 async def get_current_user(token: str = Depends(oauth2_scheme)):
+    from app.services.services_funcionario import buscar_funcionario
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Não autorizado",
