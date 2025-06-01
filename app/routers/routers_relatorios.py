@@ -14,7 +14,7 @@ router = APIRouter(prefix="/relatorios", tags=["Relatórios"])
 @router.get("/voos-programados-dia")
 async def relatorio_voos_programados_do_dia(
     data: str = Query(..., description="Data no formato YYYY-MM-DD"),
-    current_user: dict = Depends(get_current_user)  # 🔒 Protege para usuários autenticados
+    current_user: dict = Depends(get_current_user) 
 ):
     try:
         data_especifica = datetime.strptime(data, "%Y-%m-%d").date()

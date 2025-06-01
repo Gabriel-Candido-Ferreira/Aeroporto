@@ -25,9 +25,9 @@ async def listar_portoes():
 
 async def criar_portao(data: dict):
     try:
-        portao_data = Portao(**data)
+        portao_data = Portao(**data.dict())
     except Exception as e:
-        raise HTTPException(status_code=422, detail=e.errors())
+        raise HTTPException(status_code=422, detail=str(e))
 
     codigo_existente = await portoes_collection.find_one({"codigo": portao_data.codigo})
     if codigo_existente:

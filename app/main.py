@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from .routers import portao_router, voo_router, passageiro_router, relatorios_router, funcionario_router
+from app.routers import routers_funcionario, routers_voo, routers_portao, routers_passageiro, routers_relatorios
 
-app = FastAPI(title="API do Aeroporto")
-app.include_router(portao_router)
-app.include_router(voo_router)
-app.include_router(passageiro_router)
-app.include_router(funcionario_router)
-app.include_router(relatorios_router)
+app = FastAPI()
+
+app.include_router(routers_funcionario.router)
+app.include_router(routers_voo.router)
+app.include_router(routers_portao.router)
+app.include_router(routers_passageiro.router)
+app.include_router(routers_relatorios.router)

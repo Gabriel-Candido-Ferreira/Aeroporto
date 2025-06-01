@@ -9,7 +9,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="funcionarios/login")
 
 funcionarios_collection = db.funcionarios
 
-# Autenticação: verifica se o token é válido e retorna o funcionário logado
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -25,8 +24,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
 
     user = await funcionarios_collection.find_one({"_id": ObjectId(user_id)})
-    if user is None:
+    if user is None or "cargo" not in user:
         raise credentials_exception
+
     return {
         "id": str(user["_id"]),
         "nome": user["nome"],
@@ -34,11 +34,20 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         "email": user["email"]
     }
 
-# Autorização: só permite acesso para quem tem cargo 'admin'
+
 async def get_current_admin_user(current_user: dict = Depends(get_current_user)):
     if current_user["cargo"].lower() != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Ação permitida apenas para administradores"
+        )
+    return current_user
+
+
+async def get_current_non_admin_user(current_user: dict = Depends(get_current_user)):
+    if current_user["cargo"].lower() == "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Ação não permitida para administradores nesta rota"
         )
     return current_user

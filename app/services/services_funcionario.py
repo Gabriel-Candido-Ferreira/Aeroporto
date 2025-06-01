@@ -44,11 +44,12 @@ async def obter_todos_funcionarios():
     return funcionarios
 
 
-async def buscar_funcionario_por_nome(nome: str):
-    funcionario = await funcionarios_collection.find_one({"nome": nome})
+async def buscar_funcionario_por_email(email: str):
+    funcionario = await funcionarios_collection.find_one({"email": email})
     if not funcionario:
         raise HTTPException(status_code=404, detail="Funcionário não encontrado.")
-    return funcionarion_helper(funcionario)
+    return funcionario
+
 
 
 async def buscar_funcionario(id: str):

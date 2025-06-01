@@ -12,30 +12,27 @@ from app.services.auth import get_current_user, get_current_admin_user
 router = APIRouter(prefix="/voos", tags=["Voos"])
 
 
-# 🔓 Livre (ou pode proteger se quiser)
 @router.get("/")
-async def get_voos():
+async def get_voos(current_user: dict = Depends(get_current_user)):
     return await obter_todos_voos()
 
 
-# 🔒 Apenas usuários autenticados podem criar voos
-@router.post("/")
-async def create_voo(voo: Voo, current_user: dict = Depends(get_current_user)):
-    try:
-        return await criar_voo(voo)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-
 @router.get("/{voo_id}")
-async def get_voo(voo_id: str):
+async def get_voo(voo_id: str, current_user: dict = Depends(get_current_user)):
     try:
         return await obter_voo_por_id(voo_id)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
 
-# 🔐 Apenas admins podem atualizar voo
+@router.post("/")
+async def create_voo(voo: Voo, current_admin: dict = Depends(get_current_admin_user)):
+    try:
+        return await criar_voo(voo)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
 @router.put("/{voo_id}")
 async def update_voo(
     voo_id: str,
@@ -48,7 +45,6 @@ async def update_voo(
         raise HTTPException(status_code=404, detail=str(e))
 
 
-# 🔐 Apenas admins podem deletar voo
 @router.delete("/{voo_id}")
 async def delete_voo(
     voo_id: str,
