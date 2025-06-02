@@ -47,7 +47,7 @@ async def get_by_id(id: str, current_user: dict = Depends(get_current_user)):
     return funcionario
 
 
-@router.post("/")
+@router.post("/cadastro")
 async def create(funcionario: Funcionario, current_admin: dict = Depends(get_current_admin)):
     try:
         return await criar_funcionario(funcionario)
